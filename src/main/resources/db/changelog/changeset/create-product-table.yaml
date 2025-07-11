@@ -1,0 +1,55 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: v1-1
+      author: Daniil
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: product
+
+      changes:
+        - createTable:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: "uuid_generate_v4()"
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_product_id
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: article
+                  type: varchar(128)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: category
+                  type: varchar(128)
+              - column:
+                  name: price
+                  type: numeric(10,2)
+              - column:
+                  name: quantity
+                  type: int
+                  constraints:
+                    checkConstraint: "quantity >= 0"
+              - column:
+                  name: last_quantity_update_at
+                  type: timestamp
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
