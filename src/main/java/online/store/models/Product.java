@@ -1,6 +1,7 @@
 package online.store.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "name")
+    @NotBlank(message = "Product name is required")
+    @Size(max = 100, message = "Name must be less than 100 characters")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "article")
+    @NotBlank(message = "Article number is required")
+    @Column(name = "article", unique = true, nullable = false)
     private String article;
 
     @Column(name = "description")
@@ -34,10 +38,13 @@ public class Product {
     @Column(name = "category")
     private String category;
 
-    @Column(name = "price")
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be positive")
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
     @Column(name = "quantity")
+    @Min(value = 0, message = "Price should be greater or equals than 0")
     private Integer quantity;
 
     @Column(name = "last_quantity_update_at")

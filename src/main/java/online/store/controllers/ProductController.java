@@ -1,5 +1,7 @@
 package online.store.controllers;
 
+import jakarta.validation.Valid;
+import online.store.dto.ProductDto;
 import online.store.models.Product;
 import online.store.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -24,50 +24,37 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
         return new ResponseEntity<>(productService.getAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody Product product) {
-        productService.saveProduct(product);
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDto productDto) {
+        System.out.println("CONTROLLER - "+productDto.getName());
+        productService.saveProduct(productDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") UUID id) {
-        Optional<Product> product = productService.getProductById(id);
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") UUID id) {
+        ProductDto product = productService.getProductById(id);
 
-        if (product.isEmpty()) {
+        if (product == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(product.get(), HttpStatus.OK);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") UUID id, @RequestBody Product newProduct) {
-        Optional<Product> oldProduct = productService.getProductById(id);
-
-        if (oldProduct.isPresent()) {
-            Product _product = oldProduct.get();
-            _product.setName(newProduct.getName());
-            _product.setArticle(newProduct.getArticle());
-            _product.setDescription(newProduct.getDescription());
-            _product.setCategory(newProduct.getCategory());
-            _product.setPrice(newProduct.getPrice());
-
-            if (!_product.getQuantity().equals(newProduct.getQuantity())) {
-                _product.setLastQuantityUpdatedAt(LocalDateTime.now());
-            }
-
-            _product.setQuantity(newProduct.getQuantity());
-
-            productService.saveProduct(_product);
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") UUID id, @Valid @RequestBody ProductDto newProductDto) {
+        try {
+            productService.updateProduct(id, newProductDto);
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     @DeleteMapping("{id}")
@@ -79,7 +66,5 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
 }
