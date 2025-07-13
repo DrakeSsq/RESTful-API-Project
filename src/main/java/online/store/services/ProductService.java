@@ -8,7 +8,6 @@ import online.store.mappers.ProductMapper;
 import online.store.models.Product;
 import online.store.repostitories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -60,13 +59,12 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public ProductDto updateProduct(UUID id, @Valid ProductDto newProductDto) {
-
+    public void updateProduct(UUID id, @Valid ProductDto newProductDto) {
         if (productRepository.findById(id).isEmpty()) {
             throw new ProductNotFoundException(PRODUCT_NOT_FOUND);
         }
 
-        return productRepository.findById(id).map(
+        productRepository.findById(id).map(
                 existingProduct -> {
                     productMapper.updateEntityFromDto(newProductDto, existingProduct);
                     if (!existingProduct.getQuantity().equals(newProductDto.getQuantity())) {
