@@ -11,34 +11,56 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class ExceptionApiController {
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorMessage> notFoundException(ProductNotFoundException exception) {
+
+        ErrorMessage error = new ErrorMessage(
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now());
+
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(new ErrorMessage(exception.getMessage()));
+                .body(error);
     }
 
     @ExceptionHandler(UpdateProductException.class)
     public ResponseEntity<ErrorMessage> updateProductException(UpdateProductException exception) {
+
+        ErrorMessage error = new ErrorMessage(exception.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now());
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorMessage(exception.getMessage()));
+                .body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> notValidException(MethodArgumentNotValidException exception) {
+
+        ErrorMessage error = new ErrorMessage(exception.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now());
+
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(new ErrorMessage(exception.getMessage()));
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorMessage> notDataIntegrity(DataIntegrityViolationException exception) {
+        ErrorMessage error = new ErrorMessage(exception.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now());
+
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(new ErrorMessage(exception.getMessage()));
+                .body(error);
     }
 }
