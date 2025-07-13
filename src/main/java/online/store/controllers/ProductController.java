@@ -2,6 +2,7 @@ package online.store.controllers;
 
 import jakarta.validation.Valid;
 import online.store.dto.ProductDto;
+import online.store.exceptions.ProductNotFoundException;
 import online.store.models.Product;
 import online.store.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,6 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDto productDto) {
-        System.out.println("CONTROLLER - "+productDto.getName());
         productService.saveProduct(productDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -38,33 +38,20 @@ public class ProductController {
     @GetMapping("{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") UUID id) {
         ProductDto product = productService.getProductById(id);
-
-        if (product == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") UUID id, @Valid @RequestBody ProductDto newProductDto) {
-        try {
-            productService.updateProduct(id, newProductDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") UUID id,
+                                                 @Valid @RequestBody ProductDto newProductDto) {
+        productService.updateProduct(id, newProductDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") UUID id) {
-        try {
-            productService.deleteProductById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        productService.deleteProductById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
