@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-table-person" author="Daniil">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product">
+
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="article" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+
+            <column name="description" type="text"/>
+
+            <column name="category" type="varchar(128)"/>
+
+            <column name="price" type="numeric(10,2)">
+                <constraints checkConstraint="price >= 0" nullable="false"/>
+            </column>
+
+            <column name="quantity" type="int">
+                <constraints checkConstraint="quantity >= 0"/>
+            </column>
+
+            <column name="last_quantity_update_at" type="timestamp"/>
+
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
