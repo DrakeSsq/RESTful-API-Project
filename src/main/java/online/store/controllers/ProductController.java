@@ -1,5 +1,6 @@
 package online.store.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import online.store.dto.ProductDto;
 import online.store.exceptions.ProductNotFoundException;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/products")
+@Tag(name = "ProductController")
 public class ProductController {
 
     private final ProductService productService;
