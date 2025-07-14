@@ -4,7 +4,6 @@ import online.store.exceptions.ErrorMessage;
 import online.store.exceptions.ProductNotFoundException;
 import online.store.exceptions.UpdateProductException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
