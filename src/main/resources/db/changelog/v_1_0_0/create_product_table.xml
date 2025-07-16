@@ -4,16 +4,21 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="create-table-person" author="Daniil">
+    <changeSet id="create-table-product" author="Daniil">
 
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="product"/>
             </not>
         </preConditions>
+
+        <sql>
+            create extension if not exists "uuid-ossp"
+        </sql>
+
         <createTable tableName="product">
 
-            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+            <column name="id" type="uuid">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
 
@@ -39,7 +44,7 @@
 
             <column name="last_quantity_update_at" type="timestamp"/>
 
-            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="created_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>

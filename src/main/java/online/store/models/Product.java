@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -50,6 +52,7 @@ public class Product {
     @Column(name = "last_quantity_update_at")
     private LocalDateTime lastQuantityUpdatedAt;
 
+    @CreationTimestamp()
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
