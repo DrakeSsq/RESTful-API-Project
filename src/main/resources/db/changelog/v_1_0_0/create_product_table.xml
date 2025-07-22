@@ -8,15 +8,11 @@
 
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="product"/>
+                <tableExists tableName="products"/>
             </not>
         </preConditions>
 
-        <sql>
-            create extension if not exists "uuid-ossp"
-        </sql>
-
-        <createTable tableName="product">
+        <createTable tableName="products">
 
             <column name="id" type="uuid">
                 <constraints nullable="false" primaryKey="true"/>
@@ -32,15 +28,13 @@
 
             <column name="description" type="text"/>
 
-            <column name="category" type="varchar(128)"/>
-
-            <column name="price" type="numeric(10,2)">
-                <constraints checkConstraint="price >= 0" nullable="false"/>
+            <column name="category" type="varchar(128)">
+                <constraints nullable="false"/>
             </column>
 
-            <column name="quantity" type="int">
-                <constraints checkConstraint="quantity >= 0"/>
-            </column>
+            <column name="price" type="numeric(10,2)"/>
+
+            <column name="quantity" type="int"/>
 
             <column name="last_quantity_update_at" type="timestamp"/>
 

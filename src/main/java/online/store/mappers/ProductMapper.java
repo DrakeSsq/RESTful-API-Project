@@ -1,7 +1,7 @@
 package online.store.mappers;
 
 import online.store.dto.ProductDto;
-import online.store.models.Product;
+import online.store.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -18,5 +18,5 @@ public interface ProductMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "lastQuantityUpdatedAt", ignore = true)
-    void updateEntityFromDto(ProductDto productDto, @MappingTarget Product product);
+    Product updateEntityFromDto(ProductDto productDto, @MappingTarget Product product);
 }

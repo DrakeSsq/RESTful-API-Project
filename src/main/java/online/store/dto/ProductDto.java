@@ -1,18 +1,13 @@
 package online.store.dto;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import online.store.entity.enums.Category;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,27 +15,25 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProductDto {
 
-    private UUID id;
-
-    @NotBlank
+    @NotBlank(message = "Username cannot be blank")
+    @Size(min = 2, max = 25, message = "Name must be between 2 and 25 characters")
     private String name;
 
-    @NotNull
-    @Column(unique = true)
+    @NotBlank(message = "Article cannot be blank")
+    @Size(min = 5, max = 30, message = "Article must be between 5 and 30 characters")
     private String article;
 
+    @NotNull(message = "Description cannot be null")
+    @Size(min = 10, max = 100, message = "Description must be between 10 and 100 characters")
     private String description;
 
-    private String category;
+    @NotNull(message = "Category cannot be null")
+    private Category category;
 
-    @NotNull
+    @NotNull(message = "Price cannot be null")
     @Positive(message = "Price must be positive")
     private BigDecimal price;
 
     @PositiveOrZero(message = "Quantity cannot be negative")
     private Integer quantity;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime lastQuantityUpdatedAt;
-
 }
