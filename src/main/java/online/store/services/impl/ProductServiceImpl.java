@@ -11,11 +11,15 @@ import online.store.entity.Product;
 import online.store.repostitories.ProductRepository;
 import online.store.services.ProductService;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static online.store.util.ProductServiceUtil.*;
 import static online.store.util.LogMessageUtil.*;
@@ -84,6 +88,30 @@ public class ProductServiceImpl implements ProductService {
         log.info("Product {} has been updated", product);
 
         return productMapper.toDto(product);
+    }
+
+    @Transactional
+    @Scheduled(fixedDelay = 50 * 1000)
+    public void changePrice() {
+
+        List<Product> productList = productRepository.findAll();
+
+        List<Product> updatedProducts = productList.stream()
+                .peek(p ->
+                        p.setPrice(
+                                p.getPrice().multiply(BigDecimal.valueOf(1.1)))).toList();
+
+        productRepository.saveAll(updatedProducts);
+
+        log.info("Updated prices for {} products", updatedProducts.size());
+
+    }
+
+    @Scheduled(fixedDelay = 5 * 1000)
+    void changePriceNativeQuery() {
+
+        productRepository.updateAllPrices(BigDecimal.valueOf(1.1));
+        log.info("Prices updated via native query");
     }
 
     private void validateArticleAvailability(String article) {
