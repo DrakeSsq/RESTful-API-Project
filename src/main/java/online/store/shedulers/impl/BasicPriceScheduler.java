@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.store.entity.Product;
 import online.store.interfaces.Timeable;
+import online.store.report.ReportGenerator;
+import online.store.report.dto.ReportDataDto;
 import online.store.repostitories.ProductRepository;
-import online.store.services.shedulers.Scheduler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,9 +23,10 @@ import static online.store.util.LogMessageUtil.UPDATING_PRICES_BASIC;
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "spring.scheduling.basic.enabled",
                         havingValue = "true")
-public class BasicPriceSchedulerImpl implements Scheduler {
+public class BasicPriceScheduler {
 
     private final ProductRepository productRepository;
+    private final ReportGenerator reportGenerator;
 
     @Timeable
     @Scheduled(fixedDelayString = "${fixed.delay}")
@@ -32,13 +34,22 @@ public class BasicPriceSchedulerImpl implements Scheduler {
 
         List<Product> productList = productRepository.findAllWithPessimisticLock();
 
-        List<Product> updatedProducts = productList.stream()
-                .peek(p ->
-                        p.setPrice(
-                                p.getPrice().multiply(BigDecimal.valueOf(1.1)))).toList();
+        productList.forEach(product -> {
+            BigDecimal oldPrice = product.getPrice();
+            BigDecimal newPrice = oldPrice.multiply(BigDecimal.valueOf(1.1));
 
-        productRepository.saveAll(updatedProducts);
+            product.setPrice(newPrice);
 
-        log.info(UPDATING_PRICES_BASIC, updatedProducts.size());
+            reportGenerator.addData(ReportDataDto.builder()
+                    .id(product.getId())
+                    .oldPrice(oldPrice)
+                    .newPrice(newPrice)
+                    .build());
+        });
+
+        productRepository.saveAll(productList);
+        reportGenerator.generateReport();
+
+        log.info(UPDATING_PRICES_BASIC, productList.size());
     }
 }
