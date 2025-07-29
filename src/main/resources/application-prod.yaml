@@ -1,0 +1,10 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  scheduling:
+    basic.enabled: false
+    optimized.enabled: true
+
+fixed:
+  delay: 10000

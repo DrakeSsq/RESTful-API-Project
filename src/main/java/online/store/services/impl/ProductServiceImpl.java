@@ -90,30 +90,6 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDto(product);
     }
 
-    @Transactional
-    @Scheduled(fixedDelay = 50 * 1000)
-    public void changePrice() {
-
-        List<Product> productList = productRepository.findAll();
-
-        List<Product> updatedProducts = productList.stream()
-                .peek(p ->
-                        p.setPrice(
-                                p.getPrice().multiply(BigDecimal.valueOf(1.1)))).toList();
-
-        productRepository.saveAll(updatedProducts);
-
-        log.info("Updated prices for {} products", updatedProducts.size());
-
-    }
-
-    @Scheduled(fixedDelay = 5 * 1000)
-    void changePriceNativeQuery() {
-
-        productRepository.updateAllPrices(BigDecimal.valueOf(1.1));
-        log.info("Prices updated via native query");
-    }
-
     private void validateArticleAvailability(String article) {
         if (productRepository.existsProductByArticle(article)) {
             throw new ArticleAlreadyExistsException(String.format(ARTICLE_ALREADY_EXISTS, article));
