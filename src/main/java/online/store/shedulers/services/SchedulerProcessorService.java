@@ -1,4 +1,4 @@
-package online.store.services.shedulers.services;
+package online.store.shedulers.services;
 
 import lombok.RequiredArgsConstructor;
 import online.store.entity.Product;
@@ -14,6 +14,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,29 +22,29 @@ public class SchedulerProcessorService {
 
     private final ProductRepository productRepository;
     private final ReportGenerator reportGenerator;
-    private final PlatformTransactionManager txManager;
 
     @Timeable
     @Transactional
     public boolean processBatch(List<Product> batch) {
-        TransactionStatus status = txManager.getTransaction(new DefaultTransactionDefinition());
         try {
             batch.forEach(product -> {
                 BigDecimal oldPrice = product.getPrice();
                 product.setPrice(oldPrice.multiply(BigDecimal.valueOf(1.1)));
-                reportGenerator.addData(ReportDataDto.builder()
-                        .id(product.getId())
-                        .oldPrice(oldPrice)
-                        .newPrice(product.getPrice())
-                        .build());
+                addReportData(product.getId(), oldPrice, product.getPrice());
             });
             productRepository.saveAll(batch);
-            txManager.commit(status);
             return true;
         } catch (Exception e) {
-            txManager.rollback(status);
             return false;
         }
+    }
+
+    private void addReportData(UUID id, BigDecimal oldPrice, BigDecimal newPrice) {
+        reportGenerator.addData(ReportDataDto.builder()
+                        .id(id)
+                        .oldPrice(oldPrice)
+                        .newPrice(newPrice)
+                        .build());
     }
 
 }

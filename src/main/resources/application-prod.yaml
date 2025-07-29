@@ -7,4 +7,6 @@ spring:
     optimized.enabled: true
 
 fixed:
-  delay: 10000
+  delay: 5000
+batch:
+  size: 100

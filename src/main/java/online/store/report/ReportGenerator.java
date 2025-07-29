@@ -1,4 +1,12 @@
 package online.store.report;
 
-public class ReportGenerator {
+import online.store.entity.Product;
+import online.store.report.dto.ReportDataDto;
+
+
+public interface ReportGenerator {
+
+    void generateReport();
+
+    void addData(ReportDataDto reportDataDto);
 }

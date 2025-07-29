@@ -1,4 +1,4 @@
-package online.store.services.shedulers.impl;
+package online.store.shedulers.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

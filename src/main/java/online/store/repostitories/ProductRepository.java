@@ -2,6 +2,7 @@ package online.store.repostitories;
 
 import jakarta.persistence.LockModeType;
 import online.store.entity.Product;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -30,10 +30,10 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Transactional
     List<Product> findAllWithPessimisticLock();
 
-    @Modifying
-    @Query("UPDATE Product p SET p.price = p.price * :multiplier")
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("select p from Product p order by p.id")
     @Transactional
-    void updateAllPricesOptimistic(@Param("multiplier") BigDecimal multiplier);
+    List<Product> findBatchWithOptimisticLock(Pageable pageable);
 
 
 }

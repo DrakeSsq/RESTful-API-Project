@@ -7,4 +7,4 @@ spring:
     optimized.enabled: false
 
 fixed:
-  delay: 10000
+  delay: 5000
