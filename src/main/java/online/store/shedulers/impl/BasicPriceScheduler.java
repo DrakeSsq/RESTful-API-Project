@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class BasicPriceScheduler {
     @Scheduled(fixedDelayString = "${fixed.delay}")
     public void changePrice() {
 
+        reportGenerator.clearData();
+
         List<Product> productList = productRepository.findAllWithPessimisticLock();
 
         productList.forEach(product -> {
@@ -40,15 +43,18 @@ public class BasicPriceScheduler {
 
             product.setPrice(newPrice);
 
-            reportGenerator.addData(ReportDataDto.builder()
-                    .id(product.getId())
-                    .oldPrice(oldPrice)
-                    .newPrice(newPrice)
-                    .build());
+            try {
+                reportGenerator.writeData(ReportDataDto.builder()
+                        .id(product.getId())
+                        .oldPrice(oldPrice)
+                        .newPrice(newPrice)
+                        .build());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         productRepository.saveAll(productList);
-        reportGenerator.generateReport();
 
         log.info(UPDATING_PRICES_BASIC, productList.size());
     }

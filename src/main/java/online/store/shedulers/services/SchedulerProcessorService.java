@@ -7,11 +7,9 @@ import online.store.report.ReportGenerator;
 import online.store.report.dto.ReportDataDto;
 import online.store.repostitories.ProductRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -25,12 +23,18 @@ public class SchedulerProcessorService {
 
     @Timeable
     @Transactional
-    public boolean processBatch(List<Product> batch) {
+    public boolean processBatch(List<Product> batch, int batchSize) {
         try {
             batch.forEach(product -> {
                 BigDecimal oldPrice = product.getPrice();
                 product.setPrice(oldPrice.multiply(BigDecimal.valueOf(1.1)));
-                addReportData(product.getId(), oldPrice, product.getPrice());
+
+                try {
+                    addReportData(product.getId(), oldPrice, product.getPrice());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
             });
             productRepository.saveAll(batch);
             return true;
@@ -39,8 +43,8 @@ public class SchedulerProcessorService {
         }
     }
 
-    private void addReportData(UUID id, BigDecimal oldPrice, BigDecimal newPrice) {
-        reportGenerator.addData(ReportDataDto.builder()
+    private void addReportData(UUID id, BigDecimal oldPrice, BigDecimal newPrice) throws IOException {
+        reportGenerator.writeData(ReportDataDto.builder()
                         .id(id)
                         .oldPrice(oldPrice)
                         .newPrice(newPrice)

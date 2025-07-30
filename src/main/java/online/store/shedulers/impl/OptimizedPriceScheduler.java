@@ -28,8 +28,8 @@ import static online.store.util.LogMessageUtil.SUCCESSFUL_ERRORS_COUNTER;
 public class OptimizedPriceScheduler {
 
     private final ProductRepository productRepository;
-    private final ReportGenerator reportGenerator;
     private final SchedulerProcessorService schedulerProcessorService;
+    private final ReportGenerator reportGenerator;
 
     @Value("${batch.size}")
     private int BATCH_SIZE;
@@ -37,6 +37,9 @@ public class OptimizedPriceScheduler {
     @Timeable
     @Scheduled(fixedDelayString = "${fixed.delay}")
     public void runOptimizedUpdate() {
+
+        reportGenerator.clearData();
+
         int page = 0;
         List<Product> batch;
         int successCount = 0;
@@ -45,7 +48,7 @@ public class OptimizedPriceScheduler {
         do {
             batch = productRepository.findBatchWithOptimisticLock(PageRequest.of(page, BATCH_SIZE));
             if (!batch.isEmpty()) {
-                if (schedulerProcessorService.processBatch(batch)) {
+                if (schedulerProcessorService.processBatch(batch, BATCH_SIZE)) {
                     successCount += batch.size();
                 } else {
                     errorCount += batch.size();
@@ -54,7 +57,6 @@ public class OptimizedPriceScheduler {
             }
         } while (!batch.isEmpty());
 
-        reportGenerator.generateReport();
         log.info(SUCCESSFUL_ERRORS_COUNTER, successCount, errorCount);
     }
 }

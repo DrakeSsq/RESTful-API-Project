@@ -23,7 +23,7 @@
                 NOW(),
                 NOW() - (RANDOM() * 30 * INTERVAL '1 day'),
                 0
-            FROM generate_series(1, 1000) AS n;
+            FROM generate_series(1, 100) AS n;
         </sql>
     </changeSet>
 
