@@ -19,7 +19,7 @@ import java.util.List;
 import static online.store.util.LogMessageUtil.SUCCESSFUL_ERRORS_COUNTER;
 
 @Service
-@Profile("prod")
+@Profile({"prod", "local"})
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnProperty(
