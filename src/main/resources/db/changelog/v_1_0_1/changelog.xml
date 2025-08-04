@@ -8,7 +8,7 @@
         <tagDatabase tag="v.1.0.0"/>
     </changeSet>
 
-    <include file="add_column_version.xml" relativeToChangelogFile="true"/>
-    <include file="add_data.xml" relativeToChangelogFile="true"/>
+    <include file="add_version_column_to_product.xml" relativeToChangelogFile="true"/>
+    <include file="add_random_info_to_product.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

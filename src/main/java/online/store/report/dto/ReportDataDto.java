@@ -5,15 +5,12 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+
 @Builder
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ReportDataDto {
-
-    private UUID id;
-    private BigDecimal oldPrice;
-    private BigDecimal newPrice;
-
+public final class ReportDataDto {
+    private final UUID id;
+    private final BigDecimal oldPrice;
+    private final BigDecimal newPrice;
 }
+

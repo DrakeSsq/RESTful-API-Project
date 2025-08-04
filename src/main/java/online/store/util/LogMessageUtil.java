@@ -7,7 +7,11 @@ public class LogMessageUtil {
 
     public static final String SAVING_IN_DB_LOG = "Saving {} in database";
     public static final String UPDATING_PRICES_BASIC = "Updated prices for {} products";
-    public static final String TIMEABLE_ASPECT_LOG = "The transaction for the {} method was completed with the status {} in {} ms";
-    public static final String SUCCESSFUL_ERRORS_COUNTER = "Successful: {}, Errors: {}";
+    public static final String TIMEABLE_ASPECT_LOG = "The transaction was completed with the status {} in {} ms";
+    public static final String SUCCESSFUL_UPDATE = "Successful update";
     public static final String ERROR_CLOSING_CSV = "Error closing CSV writer: {}";
+    public static final String ERROR_WRITING_CSV = "Error writing CSV: {}";
+    public static final String ERROR_UPDATE_PRICE = "Price update error: {}";
+    public static final String ERROR_IN_PROCESS_METHOD = "Error in the method: {}";
+    public static final String ERROR_CLEAR_DATA = "Data clearing error: {}";
 }

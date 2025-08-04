@@ -1,15 +1,18 @@
 package online.store.report.impl;
 
 import com.opencsv.CSVWriter;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.store.report.ReportGenerator;
 import online.store.report.dto.ReportDataDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
+import static online.store.util.LogMessageUtil.ERROR_CLEAR_DATA;
 import static online.store.util.LogMessageUtil.ERROR_CLOSING_CSV;
 
 
@@ -18,15 +21,13 @@ import static online.store.util.LogMessageUtil.ERROR_CLOSING_CSV;
 @RequiredArgsConstructor
 public class ReportGeneratorImpl implements ReportGenerator {
 
-    private final static String REPORT_NAME = "report.csv";
+    @Value("${report.name}")
+    private String REPORT_NAME;
     private CSVWriter writer;
 
-    {
-        try {
-            initialize();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @PostConstruct
+    public void init() throws IOException {
+        initialize();
     }
 
     public void initialize() throws IOException {
@@ -34,7 +35,7 @@ public class ReportGeneratorImpl implements ReportGenerator {
             try {
                 writer.close();
             } catch (IOException e) {
-                log.info(ERROR_CLOSING_CSV, e.getMessage());
+                log.error(ERROR_CLOSING_CSV, e.getMessage());
             }
         }
 
@@ -49,17 +50,18 @@ public class ReportGeneratorImpl implements ReportGenerator {
             initialize();
         }
 
-        try (FileWriter fileWriter = new FileWriter(REPORT_NAME, true)) {
-            fileWriter.write(dto.getId().toString() + ", ");
-            fileWriter.write(dto.getOldPrice().toString() + ", ");
-            fileWriter.write(dto.getNewPrice().toString() + "\n");
-        }
+        writer.writeNext(new String[]{
+                dto.getId().toString(),
+                dto.getOldPrice().toString(),
+                dto.getNewPrice().toString()
+        });
     }
 
     public void clearData() {
         try {
             initialize();
         } catch (IOException e) {
+            log.error(ERROR_CLEAR_DATA, e.getMessage());
             throw new RuntimeException();
         }
     }
