@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    driver-class-name: ${DB_DRIVER}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    enabled: true
+
+  config:
+    activate:
+      on-profile: local
+  scheduling:
+    basic.enabled: true
+    optimized.enabled: false
+    fixed.delay: 50000
+    batch.size: 100
+
+report:
+  name:
+    report.csv
+
+price:
+  update:
+    multiplier: 1.1
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

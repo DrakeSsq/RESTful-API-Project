@@ -40,12 +40,7 @@ public class Product extends BaseEntity {
     @Column(name = "last_quantity_update_at")
     private LocalDateTime lastQuantityUpdatedAt;
 
-    public void setQuantity(Integer quantity) {
-        if ((this.quantity == null && quantity != null) ||
-                (this.quantity != null && !this.quantity.equals(quantity))) {
-            this.lastQuantityUpdatedAt = LocalDateTime.now();
-        }
-        this.quantity = quantity;
-    }
-
+    @Version
+    @Column(name = "version")
+    private Long version;
 }

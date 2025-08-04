@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="add-data-to-product" author="Daniil">
+        <preConditions>
+            <tableIsEmpty tableName="products"/>
+        </preConditions>
+        <sql>
+            INSERT INTO products (id, name, article, description, category, price, quantity,created_at, last_quantity_update_at, version)
+            SELECT
+                gen_random_uuid(),
+                'Product ' || n,
+                'ART-' || (100000 + n),
+                'Description for product ' || n,
+                CASE WHEN n % 3 = 0 THEN 'ELECTRONICS'
+                     WHEN n % 3 = 1 THEN 'CLOTHING'
+                     ELSE 'BOOKS' END,
+                ROUND((RANDOM() * 1000)::numeric, 2),
+                FLOOR(RANDOM() * 100)::integer,
+                NOW(),
+                NOW() - (RANDOM() * 30 * INTERVAL '1 day'),
+                0
+            FROM generate_series(1, 1000) AS n;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

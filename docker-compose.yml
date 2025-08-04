@@ -14,7 +14,7 @@ services:
       retries: 10
 
   app:
-    container_name: app
+    container_name: demo-app
     build:
       context: .
       dockerfile: Dockerfile
