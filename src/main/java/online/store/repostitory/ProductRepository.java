@@ -23,6 +23,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     boolean existsProductByArticle(String article);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Product p")
+    Page<Product> findAllPessimistic(Pageable pageable);
+
     Page<Product> findAll(Pageable pageable);
 
     @Lock(LockModeType.OPTIMISTIC)

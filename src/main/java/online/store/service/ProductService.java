@@ -1,6 +1,7 @@
 package online.store.service;
 
 import jakarta.validation.Valid;
+import online.store.criteria.SearchCriterion;
 import online.store.dto.ProductDto;
 import online.store.exception.ProductNotFoundException;
 import online.store.exception.UpdateProductException;
@@ -48,4 +49,11 @@ public interface ProductService {
      * @throws UpdateProductException при ошибке обновления
      */
     ProductDto updateProduct(UUID id, @Valid ProductDto newProductDto);
+
+    /**
+     * Производит поиск объектов по критериям
+     * @param criteria критерии для поиска
+     * @return найденных объектов, подходящих по критериям
+     */
+    List<ProductDto> searchAll(List<SearchCriterion> criteria);
 }

@@ -2,6 +2,8 @@ package online.store.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.store.criteria.SearchCriterion;
+import online.store.criteria.specification.ProductSpecificationBuilder;
 import online.store.dto.ProductDto;
 import online.store.exception.ArticleAlreadyExistsException;
 import online.store.exception.ProductNotFoundException;
@@ -11,6 +13,7 @@ import online.store.entity.Product;
 import online.store.repostitory.ProductRepository;
 import online.store.service.ProductService;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -89,6 +92,12 @@ public class ProductServiceImpl implements ProductService {
         log.info("Product {} has been updated", product);
 
         return productMapper.toDto(product);
+    }
+
+    @Override
+    public List<ProductDto> searchAll(List<SearchCriterion> criteria) {
+        Specification<Product> spec = ProductSpecificationBuilder.build(criteria);
+        return productRepository.findAll(spec).stream().map(productMapper::toDto).toList();
     }
 
     private void validateArticleAvailability(String article) {
