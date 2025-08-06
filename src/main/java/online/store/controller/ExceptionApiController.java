@@ -3,8 +3,10 @@ package online.store.controller;
 import online.store.exception.ErrorMessage;
 import online.store.exception.ProductNotFoundException;
 import online.store.exception.UpdateProductException;
+import org.hibernate.query.sqm.PathElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -45,4 +47,20 @@ public interface ExceptionApiController {
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<ErrorMessage> notDataIntegrity(DataIntegrityViolationException exception);
+
+    /**
+     * Обрабатывает конфликты целостности данных при фильтрации
+     * @param exception исключение PathElementException
+     * @return ответ с сообщением об ошибке и статусом 409 Conflict
+     */
+    @ExceptionHandler(PathElementException.class)
+    ResponseEntity<ErrorMessage> badAttribute(PathElementException exception);
+
+    /**
+     * Обрабатывает конфликты целостности данных при фильтрации а именно поле "type"
+     * @param exception исключение HttpMessageNotReadableException
+     * @return ответ с сообщением об ошибке и статусом 409 Conflict
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<ErrorMessage> badTypeAttribute(HttpMessageNotReadableException exception);
 }

@@ -14,4 +14,7 @@ public class LogMessageUtil {
     public static final String ERROR_UPDATE_PRICE = "Price update error: {}";
     public static final String ERROR_IN_PROCESS_METHOD = "Error in the method: {}";
     public static final String ERROR_CLEAR_DATA = "Data clearing error: {}";
+    public static final String ILLEGAL_ARGUMENT = "Illegal argument into json";
+    public static final String EMPTY_CRITERIA = "An empty list of criteria";
+    public static final String ILLEGAL_CRITERIA_TYPE = "Unknown criteria type";
 }
