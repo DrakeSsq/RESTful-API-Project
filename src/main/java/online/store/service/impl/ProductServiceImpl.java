@@ -96,8 +96,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> searchAll(List<SearchCriterion> criteria) {
+        if (criteria.isEmpty()) {
+            return productRepository.findAll().stream().map(productMapper::toDto).toList();
+        }
         Specification<Product> spec = ProductSpecificationBuilder.build(criteria);
         return productRepository.findAll(spec).stream().map(productMapper::toDto).toList();
+
     }
 
     private void validateArticleAvailability(String article) {
