@@ -5,6 +5,8 @@ import online.store.criteria.SearchCriterion;
 import online.store.dto.ProductDto;
 import online.store.exception.ProductNotFoundException;
 import online.store.exception.UpdateProductException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,9 +24,10 @@ public interface ProductService {
 
     /**
      * Получает список всех продуктов
+     * @param pageable параметр для пагинации
      * @return список DTO продуктов
      */
-    List<ProductDto> getAll(Integer offset, Integer limit);
+    Page<ProductDto> getAll(Pageable pageable);
 
     /**
      * Находит продукт по идентификатору
@@ -53,7 +56,14 @@ public interface ProductService {
     /**
      * Производит поиск объектов по критериям
      * @param criteria критерии для поиска
+     * @param pageable параметр для пагинации
      * @return найденных объектов, подходящих по критериям
      */
-    List<ProductDto> searchAll(List<SearchCriterion> criteria);
+    Page<ProductDto> searchAll(List<SearchCriterion> criteria, Pageable pageable);
+
+    /**
+     * Создает объекты из передаваемого списка
+     * @param list список объектов
+     */
+    void createAllProducts(List<ProductDto> list);
 }

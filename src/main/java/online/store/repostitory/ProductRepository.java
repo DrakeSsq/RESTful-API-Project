@@ -26,8 +26,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     @Query("select p from Product p")
     Page<Product> findAllPessimistic(Pageable pageable);
 
-    Page<Product> findAll(Pageable pageable);
-
     @Lock(LockModeType.OPTIMISTIC)
     @Query("select p from Product p order by p.id")
     Page<Product> findProductsOptimistic(Pageable pageable);

@@ -1,13 +1,13 @@
     package online.store.controller.impl;
 
     import lombok.RequiredArgsConstructor;
-    import lombok.extern.slf4j.Slf4j;
     import online.store.controller.ProductController;
     import online.store.criteria.SearchCriterion;
     import online.store.dto.ProductDto;
-    import online.store.response.PageResponseDto;
     import online.store.response.ResponseDto;
     import online.store.service.ProductService;
+    import org.springframework.data.domain.Page;
+    import org.springframework.data.domain.Pageable;
     import org.springframework.web.bind.annotation.*;
 
     import static online.store.util.ResponseMessageUtil.*;
@@ -18,18 +18,13 @@
 
     @RestController
     @RequiredArgsConstructor
-    @Slf4j
     public class ProductControllerImpl implements ProductController {
 
         private final ProductService productService;
 
         @Override
-        public PageResponseDto getAll(Integer offset, Integer limit) {
-            return PageResponseDto.builder()
-                    .content(productService.getAll(offset, limit))
-                    .offset(offset)
-                    .limit(limit)
-                    .build();
+        public Page<ProductDto> getAll(Pageable pageable) {
+            return productService.getAll(pageable);
         }
 
         @Override
@@ -65,12 +60,9 @@
         }
 
         @Override
-        public PageResponseDto searchAll(List<SearchCriterion> criteria) {
-            return PageResponseDto.builder()
-                    .content(productService.searchAll(criteria))
-                    .limit(10)
-                    .offset(0)
-                    .build();
+        public Page<ProductDto> searchAll(List<SearchCriterion> criteria, Pageable pageable) {
+            return productService.searchAll(criteria, pageable);
+
         }
 
     }
