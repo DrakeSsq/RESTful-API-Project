@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    enabled: false
+
+  config:
+    activate:
+      on-profile: test
+
+report:
+  name:
+    report.csv

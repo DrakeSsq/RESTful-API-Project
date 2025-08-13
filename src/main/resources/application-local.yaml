@@ -22,7 +22,7 @@ spring:
   scheduling:
     basic.enabled: true
     optimized.enabled: false
-    fixed.delay: 50000
+    fixed.delay: 100000
     batch.size: 100
 
 report:

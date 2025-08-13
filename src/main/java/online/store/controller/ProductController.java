@@ -2,12 +2,15 @@ package online.store.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import online.store.criteria.SearchCriterion;
 import online.store.dto.ProductDto;
-import online.store.response.PageResponseDto;
 import online.store.response.ResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,13 +40,11 @@ public interface ProductController {
 
     /**
      * Получает список всех продуктов
-     * @param offset страница
-     * @param limit количество объектов на странице
+     * @param pageable параметр для пагинации
      * @return список DTO продуктов
      */
     @GetMapping
-    PageResponseDto getAll( @RequestParam(value = "offset", defaultValue = "0", required = false) Integer offset,
-                            @RequestParam(value = "limit", defaultValue = "10", required = false) Integer limit);
+    Page<ProductDto> getAll(Pageable pageable);
 
     /**
      * Обновляет существующий продукт
@@ -62,5 +63,14 @@ public interface ProductController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseDto<Void> deleteProduct(@PathVariable("id") UUID id);
+
+    /**
+     * Задает фильтры для вывода данных
+     * @param criteria критерии для поиска
+     * @param pageable параметр для пагинации
+     * @return Отфильтрованный список
+     */
+    @PostMapping("/search")
+    Page<ProductDto> searchAll(@Valid @RequestBody List<SearchCriterion> criteria, Pageable pageable);
 
 }

@@ -1,9 +1,12 @@
 package online.store.service;
 
 import jakarta.validation.Valid;
+import online.store.criteria.SearchCriterion;
 import online.store.dto.ProductDto;
 import online.store.exception.ProductNotFoundException;
 import online.store.exception.UpdateProductException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,9 +24,10 @@ public interface ProductService {
 
     /**
      * Получает список всех продуктов
+     * @param pageable параметр для пагинации
      * @return список DTO продуктов
      */
-    List<ProductDto> getAll(Integer offset, Integer limit);
+    Page<ProductDto> getAll(Pageable pageable);
 
     /**
      * Находит продукт по идентификатору
@@ -48,4 +52,18 @@ public interface ProductService {
      * @throws UpdateProductException при ошибке обновления
      */
     ProductDto updateProduct(UUID id, @Valid ProductDto newProductDto);
+
+    /**
+     * Производит поиск объектов по критериям
+     * @param criteria критерии для поиска
+     * @param pageable параметр для пагинации
+     * @return найденных объектов, подходящих по критериям
+     */
+    Page<ProductDto> searchAll(List<SearchCriterion> criteria, Pageable pageable);
+
+    /**
+     * Создает объекты из передаваемого списка
+     * @param list список объектов
+     */
+    void createAllProducts(List<ProductDto> list);
 }

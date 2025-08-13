@@ -52,7 +52,7 @@ public class BasicPriceScheduler {
 
         do {
 
-            productList = productRepository.findAll(PageRequest.of(page, BATCH_SIZE));
+            productList = productRepository.findAllPessimistic(PageRequest.of(page, BATCH_SIZE));
 
             productList.forEach(product -> {
                 BigDecimal oldPrice = product.getPrice();
