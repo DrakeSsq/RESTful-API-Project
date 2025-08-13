@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
     private final MySpecificationBuilder<Product> specificationBuilder;
 
     @Override
+    @Transactional
     public UUID createProduct(ProductDto productDto) {
 
         Product product = productMapper.toEntity(productDto);
@@ -50,6 +52,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ProductDto> getAll(Pageable pageable) {
 
         log.info(GETTING_PAGES, pageable.getOffset(), pageable.getPageNumber());
@@ -59,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductDto getProductById(UUID id) {
         Product product = productRepository
                 .findById(id)
@@ -72,6 +76,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProductById(UUID id) {
         Product product = productRepository.findById(id).orElseThrow(
                 () -> new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND, id)));
@@ -81,6 +86,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDto updateProduct(UUID id, @Validated ProductDto newProductDto) {
 
         Product product = productRepository.findById(id)
@@ -97,6 +103,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ProductDto> searchAll(List<SearchCriterion> criteria, Pageable pageable) {
         if (criteria == null || criteria.isEmpty()) {
             return productRepository.findAll(pageable).map(productMapper::toDto);
@@ -107,6 +114,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void createAllProducts(List<ProductDto> list) {
         for (ProductDto productDto : list) {
             createProduct(productDto);

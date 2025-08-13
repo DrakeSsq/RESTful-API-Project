@@ -33,7 +33,6 @@ public class ProductServiceTest {
         productService.createAllProducts(createProducts());
     }
 
-
     @Test
     void singleCriteriaSearch() throws Exception {
         String json = getSingleSearchString();
