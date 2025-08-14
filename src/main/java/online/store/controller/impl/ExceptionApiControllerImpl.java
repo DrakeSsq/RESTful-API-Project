@@ -64,10 +64,10 @@ public class ExceptionApiControllerImpl implements ExceptionApiController {
     public ResponseEntity<ErrorMessage> badAttribute(PathElementException exception) {
 
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorMessage.builder()
                         .message(exception.getMessage())
-                        .status(HttpStatus.NOT_FOUND.value())
+                        .status(HttpStatus.BAD_REQUEST.value())
                         .build());
     }
 
@@ -75,10 +75,23 @@ public class ExceptionApiControllerImpl implements ExceptionApiController {
     public ResponseEntity<ErrorMessage> badTypeAttribute(RuntimeException exception) {
 
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorMessage.builder()
                         .message(exception.getMessage())
-                        .status(HttpStatus.NOT_FOUND.value())
+                        .status(HttpStatus.BAD_REQUEST.value())
                         .build());
     }
+
+    @Override
+    public ResponseEntity<ErrorMessage> prohibitionOfModification(RuntimeException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(ErrorMessage.builder()
+                        .message(exception.getMessage())
+                        .status(HttpStatus.FORBIDDEN.value())
+                        .build());
+    }
+
+
 }

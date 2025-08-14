@@ -24,5 +24,7 @@ public class LogMessageUtil {
     public static final String UPDATE_PRODUCT = "Product {} has been updated";
     public static final String PRODUCT_NOT_FOUND = "Product with %s UUID not found";
     public static final String CUSTOMER_NOT_FOUND = "Customer with id %s not found";
+    public static final String ORDER_NOT_FOUND = "Order with id %s not found";
+    public static final String SOMEONE_ELSE_ORDER = "A user with an id %s tried to change someone else's order with an id %s";
     public static final String NOT_ENOUGH_QUANTITY = "The quantity of goods you want is more than in stock or not at all. In the warehouse %s. Your wish %s";
 }

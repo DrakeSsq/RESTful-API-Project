@@ -2,13 +2,12 @@ package online.store.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.store.entity.Customer;
 import online.store.entity.Order;
 import online.store.entity.OrderItem;
 import online.store.entity.Product;
 import online.store.entity.enums.Status;
-import online.store.exception.CustomerNotFoundException;
-import online.store.exception.InsufficientProductsException;
-import online.store.exception.ProductNotFoundException;
+import online.store.exception.*;
 import online.store.repository.CustomerRepository;
 import online.store.repository.OrderRepository;
 import online.store.repository.ProductRepository;
@@ -42,13 +41,39 @@ public class OrderServiceImpl implements OrderService {
 
         order.setCustomer(customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(String.format(CUSTOMER_NOT_FOUND, id))));
-
         order.setStatus(Status.CREATED);
         order.setDeliveryAddress(orderRequest.getDeliveryAddress());
 
+        processProductInfo(order, orderRequest.getProducts());
 
+        orderRepository.save(order);
 
-        orderRequest.getProducts().forEach(item -> {
+        return order.getId();
+    }
+
+    @Override
+    @Transactional
+    public UUID addOrderItem(UUID orderId, Long customerId, List<ProductInfo> productInfoList) {
+
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(String.format(CUSTOMER_NOT_FOUND, customerId)));
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(String.format(ORDER_NOT_FOUND, orderId)));
+
+        if (order.getCustomer() != customer) {
+            throw new EditSomeoneElseOrderException(String.format(SOMEONE_ELSE_ORDER, customerId, orderId));
+        }
+
+        processProductInfo(order, productInfoList);
+
+        orderRepository.save(order);
+
+        return order.getId();
+    }
+
+    private void processProductInfo(Order order, List<ProductInfo> productInfoList) {
+        productInfoList.forEach(item -> {
             OrderItem orderItem = new OrderItem();
             Product product = productRepository.findById(item.getId())
                     .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
@@ -68,9 +93,5 @@ public class OrderServiceImpl implements OrderService {
 
             order.getItems().add(orderItem);
         });
-
-        orderRepository.save(order);
-
-        return order.getId();
     }
 }

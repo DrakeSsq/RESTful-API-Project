@@ -16,10 +16,10 @@ public interface ExceptionApiController {
 
     /**
      * Обрабатывает случаи, когда продукт не найден
-     * @param exception исключение ProductNotFoundException
+     * @param exception исключение RuntimeException
      * @return ответ с сообщением об ошибке и статусом 404 Not Found
      */
-    @ExceptionHandler({ProductNotFoundException.class, CustomerNotFoundException.class})
+    @ExceptionHandler({ProductNotFoundException.class, CustomerNotFoundException.class, OrderNotFoundException.class})
     ResponseEntity<ErrorMessage> notFoundException(RuntimeException exception);
 
     /**
@@ -56,9 +56,17 @@ public interface ExceptionApiController {
 
     /**
      * Обрабатывает конфликты целостности данных при фильтрации а именно поле "type"
-     * @param exception исключение HttpMessageNotReadableException
+     * @param exception исключение RuntimeException
      * @return ответ с сообщением об ошибке и статусом 409 Conflict
      */
     @ExceptionHandler({HttpMessageNotReadableException.class, InsufficientProductsException.class})
     ResponseEntity<ErrorMessage> badTypeAttribute(RuntimeException exception);
+
+    /**
+     * Обрабатывает ситуации, которые запрещены пользователю
+     * @param exception исключение RuntimeException
+     * @return ответ с сообщением об ошибке и статусом 409 Conflict
+     */
+    @ExceptionHandler(EditSomeoneElseOrderException.class)
+    ResponseEntity<ErrorMessage> prohibitionOfModification(RuntimeException exception);
 }
