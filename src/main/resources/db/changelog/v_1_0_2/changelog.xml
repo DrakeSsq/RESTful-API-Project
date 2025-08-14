@@ -9,6 +9,7 @@
     </changeSet>
 
     <include file="add_costumer_table.xml" relativeToChangelogFile="true"/>
+    <include file="add_any_customers_to_db.xml" relativeToChangelogFile="true"/>
     <include file="add_order_table.xml" relativeToChangelogFile="true"/>
     <include file="add_order_items_table.xml" relativeToChangelogFile="true"/>
 

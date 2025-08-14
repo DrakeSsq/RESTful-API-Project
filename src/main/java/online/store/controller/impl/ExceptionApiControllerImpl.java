@@ -17,7 +17,7 @@ public class ExceptionApiControllerImpl implements ExceptionApiController {
 
 
     @Override
-    public ResponseEntity<ErrorMessage> notFoundException(ProductNotFoundException exception) {
+    public ResponseEntity<ErrorMessage> notFoundException(RuntimeException exception) {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -72,7 +72,7 @@ public class ExceptionApiControllerImpl implements ExceptionApiController {
     }
 
     @Override
-    public ResponseEntity<ErrorMessage> badTypeAttribute(HttpMessageNotReadableException exception) {
+    public ResponseEntity<ErrorMessage> badTypeAttribute(RuntimeException exception) {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)

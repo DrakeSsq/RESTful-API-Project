@@ -1,8 +1,6 @@
 package online.store.controller;
 
-import online.store.exception.ErrorMessage;
-import online.store.exception.ProductNotFoundException;
-import online.store.exception.UpdateProductException;
+import online.store.exception.*;
 import org.hibernate.query.sqm.PathElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +19,8 @@ public interface ExceptionApiController {
      * @param exception исключение ProductNotFoundException
      * @return ответ с сообщением об ошибке и статусом 404 Not Found
      */
-    @ExceptionHandler(ProductNotFoundException.class)
-    ResponseEntity<ErrorMessage> notFoundException(ProductNotFoundException exception);
+    @ExceptionHandler({ProductNotFoundException.class, CustomerNotFoundException.class})
+    ResponseEntity<ErrorMessage> notFoundException(RuntimeException exception);
 
     /**
      * Обрабатывает ошибки при обновлении продукта
@@ -61,6 +59,6 @@ public interface ExceptionApiController {
      * @param exception исключение HttpMessageNotReadableException
      * @return ответ с сообщением об ошибке и статусом 409 Conflict
      */
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    ResponseEntity<ErrorMessage> badTypeAttribute(HttpMessageNotReadableException exception);
+    @ExceptionHandler({HttpMessageNotReadableException.class, InsufficientProductsException.class})
+    ResponseEntity<ErrorMessage> badTypeAttribute(RuntimeException exception);
 }

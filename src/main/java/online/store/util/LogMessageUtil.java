@@ -22,4 +22,7 @@ public class LogMessageUtil {
     public static final String GETTING_PAGES = "Getting {} pages of {} products";
     public static final String DELETE_PRODUCT = "Product with id {} has been deleted";
     public static final String UPDATE_PRODUCT = "Product {} has been updated";
+    public static final String PRODUCT_NOT_FOUND = "Product with %s UUID not found";
+    public static final String CUSTOMER_NOT_FOUND = "Customer with id %s not found";
+    public static final String NOT_ENOUGH_QUANTITY = "The quantity of goods you want is more than in stock or not at all. In the warehouse %s. Your wish %s";
 }

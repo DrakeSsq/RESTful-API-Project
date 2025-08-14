@@ -6,7 +6,7 @@ import online.store.entity.Product;
 import online.store.interfaces.CalculateTransactionTime;
 import online.store.report.ReportGenerator;
 import online.store.report.dto.ReportDataDto;
-import online.store.repostitory.ProductRepository;
+import online.store.repository.ProductRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
