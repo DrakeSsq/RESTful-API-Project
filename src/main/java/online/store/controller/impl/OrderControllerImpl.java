@@ -6,6 +6,7 @@ import online.store.controller.OrderController;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
 import online.store.response.ResponseDto;
+import online.store.response.ResponseOrder;
 import online.store.service.OrderService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,4 +35,10 @@ public class OrderControllerImpl implements OrderController {
                 .message("Заказ создан")
                 .build();
     }
+
+    @Override
+    public ResponseOrder getOrder(UUID orderId, Long customerId) {
+        return orderService.getOrder(orderId, customerId);
+    }
 }
+

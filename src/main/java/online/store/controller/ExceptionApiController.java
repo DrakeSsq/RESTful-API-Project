@@ -65,8 +65,8 @@ public interface ExceptionApiController {
     /**
      * Обрабатывает ситуации, которые запрещены пользователю
      * @param exception исключение RuntimeException
-     * @return ответ с сообщением об ошибке и статусом 409 Conflict
+     * @return ответ с сообщением об ошибке и статусом
      */
-    @ExceptionHandler(EditSomeoneElseOrderException.class)
+    @ExceptionHandler({EditSomeoneElseOrderException.class, ReceivingSomeoneElseOrderException.class})
     ResponseEntity<ErrorMessage> prohibitionOfModification(RuntimeException exception);
 }

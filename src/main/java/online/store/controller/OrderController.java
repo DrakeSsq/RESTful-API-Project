@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
 import online.store.response.ResponseDto;
+import online.store.response.ResponseOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,5 +24,10 @@ public interface OrderController {
     ResponseDto<UUID> addOrderItem(@PathVariable("orderId") UUID orderId,
                                    @RequestHeader("customerId") Long customerId,
                                    @RequestBody List<ProductInfo> productInfoList);
+
+    @GetMapping("/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
+    ResponseOrder getOrder(@PathVariable("orderId") UUID orderId,
+                           @RequestHeader("customerId") Long customerId);
 
 }

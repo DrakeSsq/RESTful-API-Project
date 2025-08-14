@@ -13,11 +13,15 @@ import online.store.repository.OrderRepository;
 import online.store.repository.ProductRepository;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
+import online.store.response.OrderProductDto;
+import online.store.response.ResponseOrder;
 import online.store.service.OrderService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,6 +74,42 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
 
         return order.getId();
+    }
+
+    @Override
+    public ResponseOrder getOrder(UUID orderId, Long customerId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(String.format(ORDER_NOT_FOUND, orderId)));
+
+        if (!order.getCustomer().getId().equals(customerId)) {
+            throw new ReceivingSomeoneElseOrderException(String.format(SOMEONE_ELSE_ORDER, customerId, orderId));
+        }
+
+        ResponseOrder response = new ResponseOrder();
+
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        List<OrderProductDto> products = new ArrayList<>();
+
+        for (OrderItem item : order.getItems()) {
+
+            products.add(OrderProductDto.builder()
+                    .productId(item.getProduct().getId())
+                    .name(item.getProduct().getName())
+                    .quantity(item.getQuantity())
+                    .price(item.getPrice())
+                    .build());
+
+            BigDecimal itemTotal = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+            totalPrice = totalPrice.add(itemTotal);
+        }
+
+        response.setProducts(products);
+        response.setTotalPrice(totalPrice);
+
+        return response;
+
     }
 
     private void processProductInfo(Order order, List<ProductInfo> productInfoList) {
