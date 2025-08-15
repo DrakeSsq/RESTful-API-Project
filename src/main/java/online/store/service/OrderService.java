@@ -1,7 +1,9 @@
 package online.store.service;
 
+import online.store.entity.enums.Status;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
+import online.store.request.StatusRequest;
 import online.store.response.ResponseOrder;
 
 import java.util.List;
@@ -14,4 +16,10 @@ public interface OrderService {
     UUID addOrderItem(UUID orderId, Long customerId, List<ProductInfo> productInfoList);
 
     ResponseOrder getOrder(UUID orderId, Long customerId);
+
+    void deleteOrder(UUID orderId, Long customerId);
+
+    UUID confirmOrder(UUID orderId, Long customerId);
+
+    void changeStatus(UUID orderId, Long customerId, StatusRequest status);
 }

@@ -2,19 +2,16 @@ package online.store.controller.impl;
 
 import online.store.controller.ExceptionApiController;
 import online.store.exception.ErrorMessage;
-import online.store.exception.ProductNotFoundException;
 import online.store.exception.UpdateProductException;
 import org.hibernate.query.sqm.PathElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @ControllerAdvice
 public class ExceptionApiControllerImpl implements ExceptionApiController {
-
 
     @Override
     public ResponseEntity<ErrorMessage> notFoundException(RuntimeException exception) {

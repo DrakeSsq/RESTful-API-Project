@@ -26,5 +26,17 @@ public class LogMessageUtil {
     public static final String CUSTOMER_NOT_FOUND = "Customer with id %s not found";
     public static final String ORDER_NOT_FOUND = "Order with id %s not found";
     public static final String SOMEONE_ELSE_ORDER = "A user with an id %s tried to use someone else's order with an id %s";
+    public static final String SOMEONE_ELSE_ORDER_LOG = "A user with an id {} tried to use someone else's order with an id {}";
     public static final String NOT_ENOUGH_QUANTITY = "The quantity of goods you want is more than in stock or not at all. In the warehouse %s. Your wish %s";
+    public static final String CREATE_ORDER = "A user with an ID {} has created an order with an ID {}";
+    public static final String ADD_ORDER_ITEMS = "{} products were added to the order with idi {}";
+    public static final String GET_ORDER = "Receiving an order with an ID {}";
+    public static final String DELETE_ORDER = "Removing an item from the ID {}";
+    public static final String CHANGE_ORDER_STATUS = "Changing the order status from the {} ID to the {} status";
+    public static final String PROHIBITION_OPERATION = "Attempt to delete an order that was not CANCELLED";
+    public static final String SUCCESS_CREATE = "The order has been placed";
+    public static final String ADD_ITEM_TO_ORDER = "The product has been added";
+    public static final String ORDER_HAS_BEEN_DELETED = "Order has been deleted";
+    public static final String ORDER_HAS_BEEN_CONFIRMED = "The order has been confirmed";
+    public static final String STATUS_CHANGED = "The order status has been successfully changed";
 }
