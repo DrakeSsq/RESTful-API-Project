@@ -26,8 +26,4 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
 }

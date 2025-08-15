@@ -1,4 +1,4 @@
-package online.store.repostitory;
+package online.store.repository;
 
 import jakarta.persistence.LockModeType;
 import online.store.entity.Product;

@@ -10,7 +10,7 @@ import online.store.exception.ProductNotFoundException;
 import online.store.exception.UpdateProductException;
 import online.store.mapper.ProductMapper;
 import online.store.entity.Product;
-import online.store.repostitory.ProductRepository;
+import online.store.repository.ProductRepository;
 import online.store.service.ProductService;
 import online.store.util.LogMessageUtil;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static online.store.util.LogMessageUtil.PRODUCT_NOT_FOUND;
 import static online.store.util.ProductServiceUtil.*;
 import static online.store.util.LogMessageUtil.*;
 

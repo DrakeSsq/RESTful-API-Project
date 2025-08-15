@@ -20,7 +20,7 @@ spring:
     activate:
       on-profile: local
   scheduling:
-    basic.enabled: true
+    basic.enabled: false
     optimized.enabled: false
     fixed.delay: 100000
     batch.size: 100

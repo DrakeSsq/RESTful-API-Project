@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="add-customer-table" author="Daniil">
+        <preConditions>
+            <not>
+                <tableExists tableName="customers"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="customers">
+
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="login" type="varchar">
+                <constraints unique="true" nullable="false"/>
+            </column>
+
+            <column name="email" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_active" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
