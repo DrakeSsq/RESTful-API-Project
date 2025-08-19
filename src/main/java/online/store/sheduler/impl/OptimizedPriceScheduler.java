@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import online.store.entity.Product;
 import online.store.interfaces.CalculateTransactionTime;
 import online.store.report.ReportGenerator;
-import online.store.repostitory.ProductRepository;
+import online.store.repository.ProductRepository;
 import online.store.sheduler.service.SchedulerProcessorService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

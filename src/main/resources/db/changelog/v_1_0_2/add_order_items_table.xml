@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="add-order-item-table" author="Daniil">
+        <preConditions>
+            <not>
+                <tableExists tableName="order_items"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="order_items">
+
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="order_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="order_items_order_id" references="orders(id)"/>
+            </column>
+
+            <column name="product_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="order_items_product_id" references="products(id)"/>
+            </column>
+
+            <column name="quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="price" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

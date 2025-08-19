@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import online.store.entity.enums.Category;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -39,6 +40,10 @@ public class Product extends BaseEntity {
 
     @Column(name = "last_quantity_update_at")
     private LocalDateTime lastQuantityUpdatedAt;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @Version
     @Column(name = "version")
