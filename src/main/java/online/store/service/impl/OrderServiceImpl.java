@@ -111,7 +111,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void deleteOrder(UUID orderId, Long customerId) {
 
-        Order order = validCheck(orderId, customerId);
+        Order order = orderRepository.findByIdAndCustomerIdWithItemsAndProducts(orderId, customerId).orElseThrow(
+                () -> new OrderNotFoundException(ORDER_NOT_FOUND));
 
         if (!order.getStatus().equals(Status.CREATED)) {
             throw new ProhibitionOperationException(PROHIBITION_OPERATION);
