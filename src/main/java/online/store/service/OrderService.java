@@ -1,12 +1,15 @@
 package online.store.service;
 
+import online.store.dto.OrderInfo;
 import online.store.entity.enums.Status;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
 import online.store.request.StatusRequest;
+import online.store.response.AccountResponse;
 import online.store.response.ResponseOrder;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface OrderService {
@@ -22,4 +25,6 @@ public interface OrderService {
     UUID confirmOrder(UUID orderId, Long customerId);
 
     void changeStatus(UUID orderId, Long customerId, StatusRequest status);
+
+    Map<UUID, List<OrderInfo>> createReport();
 }

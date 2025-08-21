@@ -1,5 +1,6 @@
 package online.store.repository;
 
+import online.store.dto.CustomDto;
 import online.store.dto.OrderItemDto;
 import online.store.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,15 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, UUID> {
         WHERE o.id = :orderId
     """)
     List<OrderItemDto> findOrderItems(@Param("orderId") UUID orderId);
+
+    @Query(value =
+            "select product_id, orders.id, customers.id, orders.status, orders.delivery_address, quantity, " +
+            "customers.login, customers.email " +
+            "from order_items " +
+            "left join orders on order_items.order_id = orders.id " +
+            "left join customers on orders.customer_id = customers.id " +
+            "where orders.status in ('CREATED', 'CONFIRMED');",
+
+            nativeQuery = true)
+    List<CustomDto> getDataToReport();
 }

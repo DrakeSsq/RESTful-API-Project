@@ -2,6 +2,7 @@ package online.store.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.store.dto.OrderInfo;
 import online.store.dto.OrderItemDto;
 import online.store.entity.Order;
 import online.store.entity.OrderItem;
@@ -15,6 +16,7 @@ import online.store.repository.ProductRepository;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
 import online.store.request.StatusRequest;
+import online.store.response.AccountResponse;
 import online.store.response.OrderProductDto;
 import online.store.response.ResponseOrder;
 import online.store.service.OrderService;
@@ -41,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderProcessingServiceImpl orderProcessingService;
 
 
     @Override
@@ -148,6 +151,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         log.info(CHANGE_ORDER_STATUS, orderId, status);
+    }
+
+    @Override
+    public Map<UUID, List<OrderInfo>> createReport() {
+        return orderProcessingService.getAggregatedProductsOrder();
     }
 
     private Order validCheck(UUID orderId, Long customerId) {
