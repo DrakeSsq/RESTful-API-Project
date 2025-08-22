@@ -16,7 +16,6 @@ import online.store.repository.ProductRepository;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
 import online.store.request.StatusRequest;
-import online.store.response.AccountResponse;
 import online.store.response.OrderProductDto;
 import online.store.response.ResponseOrder;
 import online.store.service.OrderService;
@@ -29,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -154,7 +154,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Map<UUID, List<OrderInfo>> createReport() {
+    public Map<UUID, List<OrderInfo>> createReport() throws ExecutionException, InterruptedException {
         return orderProcessingService.getAggregatedProductsOrder();
     }
 

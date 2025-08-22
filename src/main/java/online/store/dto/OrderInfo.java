@@ -1,21 +1,16 @@
 package online.store.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import online.store.entity.enums.Status;
 
 import java.util.UUID;
 
+@Builder
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class OrderInfo {
-    UUID id;
-    CustomerInfo customer;
-    Status status;
-    String deliveryAddress;
-    Integer quantity;
+    private UUID id;
+    private CustomerInfo customer;
+    private Status status;
+    private String deliveryAddress;
+    private Integer quantity;
 }

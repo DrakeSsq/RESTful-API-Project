@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import static online.store.util.LogMessageUtil.*;
 
@@ -72,7 +73,7 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public ResponseDto<Map<UUID, List<OrderInfo>>> getReport() {
+    public ResponseDto<Map<UUID, List<OrderInfo>>> getReport() throws ExecutionException, InterruptedException {
         return ResponseDto.<Map<UUID, List<OrderInfo>>>builder()
                 .data(orderService.createReport())
                 .message(ORDER_HAS_BEEN_CONFIRMED)

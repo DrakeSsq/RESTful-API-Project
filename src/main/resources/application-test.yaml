@@ -14,6 +14,11 @@ spring:
     activate:
       on-profile: test
 
+microservice:
+  account-service:
+    ip: http://localhost:8082
+    path-to-report: /mock/accounts/find-by-logins
+
 report:
   name:
     report.csv

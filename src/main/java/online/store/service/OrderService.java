@@ -11,6 +11,7 @@ import online.store.response.ResponseOrder;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public interface OrderService {
 
@@ -26,5 +27,5 @@ public interface OrderService {
 
     void changeStatus(UUID orderId, Long customerId, StatusRequest status);
 
-    Map<UUID, List<OrderInfo>> createReport();
+    Map<UUID, List<OrderInfo>> createReport() throws ExecutionException, InterruptedException;
 }
