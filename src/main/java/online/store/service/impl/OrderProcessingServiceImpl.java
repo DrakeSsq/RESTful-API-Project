@@ -16,6 +16,8 @@ import java.net.ConnectException;
 import java.util.*;
 import java.util.concurrent.*;
 
+import static online.store.util.LogMessageUtil.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -56,8 +58,6 @@ public class OrderProcessingServiceImpl {
                     .add(orderInfo);
         }
 
-
-
         CompletableFuture<AccountResponse> completableFuture = webClient.post()
                 .uri(pathUri)
                 .bodyValue(logins)
@@ -67,13 +67,13 @@ public class OrderProcessingServiceImpl {
                 .exceptionally(ex -> {
 
                             if (ex.getCause() instanceof ConnectException) {
-                                log.error("Connection to {} refused", pathUri);
+                                log.error(CONNECT_EXCEPTION, pathUri);
                                 return null;
                             } else if (ex.getCause() instanceof TimeoutException) {
-                                log.error("Request timeout to {}", pathUri);
+                                log.error(TIMEOUT_EXCEPTION, pathUri);
                                 return null;
                             } else {
-                                log.error("Unexpected error when calling {}: {}", pathUri, ex.getCause().getMessage(), ex.getCause());
+                                log.error(UNEXPECTED_EXCEPTION, pathUri, ex.getCause().getMessage(), ex.getCause());
                                 return null;
                             }
                         });
@@ -82,10 +82,9 @@ public class OrderProcessingServiceImpl {
         AccountResponse accountResponse = completableFuture.get();
 
         if (accountResponse == null) {
-            log.warn("Account response is null, skipping account number mapping");
+            log.warn(ACCOUNT_RESPONSE_IS_NULL);
             return result;
         }
-
 
         result.values().stream().flatMap(List::stream)
                 .forEach(orderInfo -> {

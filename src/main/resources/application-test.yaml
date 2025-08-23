@@ -22,3 +22,9 @@ microservice:
 report:
   name:
     report.csv
+
+wiremock:
+  server:
+    port: 0
+    url: "http://localhost:"
+    path:

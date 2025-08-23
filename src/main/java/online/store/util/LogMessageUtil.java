@@ -39,4 +39,8 @@ public class LogMessageUtil {
     public static final String ORDER_HAS_BEEN_DELETED = "Order has been deleted";
     public static final String ORDER_HAS_BEEN_CONFIRMED = "The order has been confirmed";
     public static final String STATUS_CHANGED = "The order status has been successfully changed";
+    public static final String CONNECT_EXCEPTION = "Connection to {} refused";
+    public static final String TIMEOUT_EXCEPTION = "Request timeout to {}";
+    public static final String UNEXPECTED_EXCEPTION = "Unexpected error when calling {}: {}";
+    public static final String ACCOUNT_RESPONSE_IS_NULL = "Account response is null, skipping account number mapping";
 }
