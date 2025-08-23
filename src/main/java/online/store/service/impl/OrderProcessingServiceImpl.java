@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.net.ConnectException;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 
 @Slf4j
 @Service
@@ -56,14 +56,36 @@ public class OrderProcessingServiceImpl {
                     .add(orderInfo);
         }
 
-        CompletableFuture<AccountResponse> completable = webClient.post()
+
+
+        CompletableFuture<AccountResponse> completableFuture = webClient.post()
                 .uri(pathUri)
                 .bodyValue(logins)
                 .retrieve()
                 .bodyToMono(AccountResponse.class)
-                .toFuture();
+                .toFuture()
+                .exceptionally(ex -> {
 
-        AccountResponse accountResponse = completable.get();
+                            if (ex.getCause() instanceof ConnectException) {
+                                log.error("Connection to {} refused", pathUri);
+                                return null;
+                            } else if (ex.getCause() instanceof TimeoutException) {
+                                log.error("Request timeout to {}", pathUri);
+                                return null;
+                            } else {
+                                log.error("Unexpected error when calling {}: {}", pathUri, ex.getCause().getMessage(), ex.getCause());
+                                return null;
+                            }
+                        });
+
+
+        AccountResponse accountResponse = completableFuture.get();
+
+        if (accountResponse == null) {
+            log.warn("Account response is null, skipping account number mapping");
+            return result;
+        }
+
 
         result.values().stream().flatMap(List::stream)
                 .forEach(orderInfo -> {
