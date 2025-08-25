@@ -2,6 +2,7 @@ package online.store.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.store.dto.OrderInfo;
 import online.store.dto.OrderItemDto;
 import online.store.entity.Order;
 import online.store.entity.OrderItem;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderProcessingServiceImpl orderProcessingService;
 
 
     @Override
@@ -111,7 +114,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void deleteOrder(UUID orderId, Long customerId) {
 
-        Order order = validCheck(orderId, customerId);
+        Order order = orderRepository.findByIdAndCustomerIdWithItemsAndProducts(orderId, customerId).orElseThrow(
+                () -> new OrderNotFoundException(ORDER_NOT_FOUND));
 
         if (!order.getStatus().equals(Status.CREATED)) {
             throw new ProhibitionOperationException(PROHIBITION_OPERATION);
@@ -147,6 +151,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         log.info(CHANGE_ORDER_STATUS, orderId, status);
+    }
+
+    @Override
+    public Map<UUID, List<OrderInfo>> createReport() throws ExecutionException, InterruptedException {
+        return orderProcessingService.getAggregatedProductsOrder();
     }
 
     private Order validCheck(UUID orderId, Long customerId) {

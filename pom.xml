@@ -136,6 +136,21 @@
 			<artifactId>commons-csv</artifactId>
 			<version>1.14.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wiremock.integrations</groupId>
+			<artifactId>wiremock-spring-boot</artifactId>
+			<version>3.9.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -160,9 +175,9 @@
 							<artifactId>lombok</artifactId>
 						</path>
 					</annotationProcessorPaths>
-                    <source>24</source>
-                    <target>24</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
+                    <source>21</source>
+                    <target>21</target>
+					<release>21</release>
                 </configuration>
 			</plugin>
 			<plugin>

@@ -3,16 +3,20 @@ package online.store.controller.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.store.controller.OrderController;
+import online.store.dto.OrderInfo;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
 import online.store.request.StatusRequest;
+import online.store.response.AccountResponse;
 import online.store.response.ResponseDto;
 import online.store.response.ResponseOrder;
 import online.store.service.OrderService;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import static online.store.util.LogMessageUtil.*;
 
@@ -65,6 +69,14 @@ public class OrderControllerImpl implements OrderController {
         orderService.changeStatus(orderId, customerId, status);
         return ResponseDto.<Void>builder()
                 .message(STATUS_CHANGED)
+                .build();
+    }
+
+    @Override
+    public ResponseDto<Map<UUID, List<OrderInfo>>> getReport() throws ExecutionException, InterruptedException {
+        return ResponseDto.<Map<UUID, List<OrderInfo>>>builder()
+                .data(orderService.createReport())
+                .message(ORDER_HAS_BEEN_CONFIRMED)
                 .build();
     }
 }

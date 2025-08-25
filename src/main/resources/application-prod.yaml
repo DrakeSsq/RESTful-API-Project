@@ -34,6 +34,10 @@ price:
   update:
     multiplier: 1.1
 
+microservice:
+  account-service:
+    ip: http://localhost:8082
+    path-to-report: /mock/accounts/find-by-logins
 
 springdoc:
   swagger-ui:

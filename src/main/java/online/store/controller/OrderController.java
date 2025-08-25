@@ -1,16 +1,20 @@
 package online.store.controller;
 
 import jakarta.validation.Valid;
+import online.store.dto.OrderInfo;
 import online.store.request.OrderRequest;
 import online.store.request.ProductInfo;
 import online.store.request.StatusRequest;
+import online.store.response.AccountResponse;
 import online.store.response.ResponseDto;
 import online.store.response.ResponseOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @RequestMapping("/api/order")
 public interface OrderController {
@@ -46,5 +50,9 @@ public interface OrderController {
     ResponseDto<Void> changeStatus(@PathVariable("orderId") UUID orderId,
                                    @RequestHeader("customerId") Long customerId,
                                    @RequestBody StatusRequest statusRequest);
+
+    @GetMapping("/report")
+    @ResponseStatus(HttpStatus.CREATED)
+    ResponseDto<Map<UUID, List<OrderInfo>>> getReport() throws ExecutionException, InterruptedException;
 
 }
